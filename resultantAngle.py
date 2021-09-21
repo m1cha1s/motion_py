@@ -26,7 +26,6 @@ class ResultantAngle:
     def calculateAngle(self) -> float:
         angle = np.zeros((1,1), float)
         np.rad2deg(np.arctan2(self.Vr[1], self.Vr[0]), angle)
-        # print(angle[0][0]+90)
         return angle[0][0]+90
 
     def rotateVs(self, a) -> None:
