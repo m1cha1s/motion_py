@@ -6,11 +6,13 @@ import sys
 import os
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, *args, **kwargs):
-        super(MainWindow, self).__init__(*args, **kwargs)
+    def __init__(self):
+        super(MainWindow, self).__init__()
 
         self.graphWidget = pg.PlotWidget()
         self.setCentralWidget(self.graphWidget)
 
-    def plotData(self, data:np.array):
-        self.graphWidget.plotItem
+    def plotData(self, data:np.ndarray, mostPoint:np.ndarray):
+        self.graphWidget.addItem(pg.PlotCurveItem(x=data[0], y=data[1]))
+        self.graphWidget.addItem(pg.ScatterPlotItem(x=mostPoint[0],y=mostPoint[1], size=20))
+        self.graphWidget.addItem(pg.GridItem())
