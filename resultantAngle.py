@@ -18,42 +18,40 @@ class ResultantAngle:
 
         self.da = da
 
-        self.data = np.array([[0], [-1]], float)
+        self.data = np.zeros((2,int(180/self.da)), float)
 
     def calculateVr(self) -> None:
-        self.Vr = np.add(self.Vw, self.Vs)
+        np.add(self.Vw, self.Vs, self.Vr)
 
     def calculateAngle(self) -> float:
         angle = np.zeros((1,1), float)
-        np.rad2deg(np.arctan2(self.Vr[0], self.Vr[1]), angle)
-        print(angle[0][0]-90)
-        return angle[0][0]-90
+        np.rad2deg(np.arctan2(self.Vr[1], self.Vr[0]), angle)
+        # print(angle[0][0]+90)
+        return angle[0][0]+90
 
     def rotateVs(self, a) -> None:
         rho, phi = cart2pol(self.Vs[0][0], self.Vs[1][0])
         a_rad = np.zeros((1,1), float)
         np.deg2rad(a, a_rad)
-        phi-=a_rad[0][0]
+        phi+=a_rad[0][0]
         self.Vs[0][0], self.Vs[1][0] = pol2cart(rho, phi)
 
     def calculateAllPosible(self) -> np.ndarray:
 
         self.data.fill(0)
-        self.data.resize((2,1))
+        self.data.resize((2,int(180/self.da)))
         
         a = 0
-        while (True):
-            if(a<180):
-                self.calculateVr()
-                angle = self.calculateAngle()
-                
-                
-                a += self.da
-                self.rotateVs(self.da)
+        for i in range(int(180/self.da)):
+            self.calculateVr()
+            angle = self.calculateAngle()
+            
+            
+            a += self.da
+            self.rotateVs(self.da)
 
-                self.data = np.append(self.data, np.array([[a], [angle]]), 1)
-            else:
-                return self.data
+            self.data[0][i], self.data[1][i] = a, angle
+        return self.data
         
 
     def findMaxAngle(self) -> np.ndarray:
